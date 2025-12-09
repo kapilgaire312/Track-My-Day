@@ -34,6 +34,7 @@ export async function GET(req, { params }) {
     } else {
       const today = new Date(date);
       const previousDays = getPreviousDays(today, days);
+      console.log(previousDays);
       const existingActivity = await activitiesDb.activities.filter((item) =>
         previousDays.includes(item.date),
       );
@@ -41,9 +42,11 @@ export async function GET(req, { params }) {
       if (!existingActivity) {
         return NextResponse.json({ msg: null }, { status: 404 });
       }
-
-      const requiredActivity = existingActivity?.map((item) => item.activity);
-
+      console.log(JSON.stringify(existingActivity[0], null, 2));
+      let requiredActivity = maintainOrderOfActivityDays(
+        existingActivity,
+        previousDays,
+      );
       return NextResponse.json({ msg: requiredActivity }, { status: 200 });
     }
   } catch (error) {
@@ -62,4 +65,19 @@ function getPreviousDays(today, days) {
     previousDays.push(previousDate.toDateString());
   }
   return previousDays;
+}
+
+function maintainOrderOfActivityDays(activities, daysList) {
+  const sortedActivities = daysList.map((day, index) => {
+    let foundActivity = [];
+    foundActivity = activities.find((item) => day === item.date);
+    if (!foundActivity) {
+      for (let i = 0; i < 48; i++) {
+        foundActivity.push({ isSelected: false, value: "", category: null });
+      }
+      return foundActivity;
+    }
+    return foundActivity.activity;
+  });
+  return sortedActivities;
 }

@@ -25,7 +25,7 @@ export default function StackedBarChart({
   return (
     <div>
       <div className="flex select-none w-[100%] p-5 justify-center mb-20">
-        {activity.map((item, index) => {
+        {activity?.map((item, index) => {
           const catIndex = getIndexOfCat(categoryList, item.category);
 
           const colour = catIndex !== -1 ? colourList[catIndex] : "#808080";

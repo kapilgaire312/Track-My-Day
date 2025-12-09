@@ -12,10 +12,15 @@ import {
 import { getTicks } from "../utils/getTicksForXaxis";
 import Loading from "@/app/Components/Loading";
 export default function CategoryBarChart({ data, colourList }) {
-  console.log(data);
   const ticks = getTicks(data);
-  console.log(ticks);
-  return (
+
+  console.log(data);
+
+  return !data ? (
+    <div className="flex justify-center">
+      <div>No activities for today</div>{" "}
+    </div>
+  ) : (
     <div>
       <BarChart data={data}></BarChart>
       <BarChart

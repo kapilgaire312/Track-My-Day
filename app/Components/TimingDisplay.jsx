@@ -70,7 +70,6 @@ export default function TimingDisplay({ selectedDate }) {
     "11:00 P.M - 11:30 P.M",
     "11:30 P.M - 12:00 P.M",
   ];
-  //const [activity, setActivity] = useState([]);
   const { activity, setActivity } = useActivityContext();
   const inputRef = useRef([]);
 
@@ -84,7 +83,7 @@ export default function TimingDisplay({ selectedDate }) {
 
   useEffect(() => {
     let flag = false;
-    const updateActivity = activity.map((item, index) => {
+    const updateActivity = activity?.map((item, index) => {
       if (item.category != categoryReturned[index]?.category) flag = true;
 
       return { ...item, category: categoryReturned[index]?.category };
@@ -96,7 +95,7 @@ export default function TimingDisplay({ selectedDate }) {
     setTimeout(() => {
       let flag = true;
       let count = 0;
-      activity.map((item) => {
+      activity?.map((item) => {
         if (item.isSelected) count++;
       });
       console.log(count);

@@ -14,6 +14,7 @@ export default async function saveActivityDb(
   });
 
   if (!res.ok) {
+    console.log(res)
     throw new Error("Failed saving added activities.");
   }
   const category = await res.json();

@@ -20,7 +20,6 @@ export async function fetchFromDB(session) {
 
 export async function fetchMultiFromDb(session, days) {
   let storedActivity;
-  let allActivities = [];
   const date = new Date().toDateString();
   console.log(date);
   console.log(session?.user);
