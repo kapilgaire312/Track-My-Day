@@ -18,58 +18,11 @@ import { useActivityContext } from "../Contexts/activityContext.js";
 
 import { useCategoryListContext } from "../Contexts/categoryContext";
 import { categoryListConvert } from "../utils/createOptionsFromCat";
+import { timeSegments } from "../utils/timeStamps";
+import { updateDbActivity } from "../utils/updateDb";
+import { getActivity } from "../utils/fetchFromDb";
 
 export default function TimingDisplay({ selectedDate }) {
-  const timeSegments = [
-    "12:00 P.M - 12:30 A.M",
-    "12:30 A.M - 1:00 A.M",
-    "1:00 A.M - 1:30 A.M",
-    "1:30 A.M - 2:00 A.M",
-    "2:00 A.M - 2:30 A.M",
-    "2:30 A.M - 3:00 A.M",
-    "3:00 A.M - 3:30 A.M",
-    "3:30 A.M - 4:00 A.M",
-    "4:00 A.M - 4:30 A.M",
-    "4:30 A.M - 5:00 A.M",
-    "5:00 A.M - 5:30 A.M",
-    "5:30 A.M - 6:00 A.M",
-    "6:00 A.M - 6:30 A.M",
-    "6:30 A.M - 7:00 A.M",
-    "7:00 A.M - 7:30 A.M",
-    "7:30 A.M - 8:00 A.M",
-    "8:00 A.M - 8:30 A.M",
-    "8:30 A.M - 9:00 A.M",
-    "9:00 A.M - 9:30 A.M",
-    "9:30 A.M - 10:00 A.M",
-    "10:00 A.M - 10:30 A.M",
-    "10:30 A.M - 11:00 A.M",
-    "11:00 A.M - 11:30 A.M",
-    "11:30 A.M - 12:00 A.M",
-    "12:00 A.M - 12:30 P.M",
-    "12:30 P.M - 1:00 P.M",
-    "1:00 P.M - 1:30 P.M",
-    "1:30 P.M - 2:00 P.M",
-    "2:00 P.M - 2:30 P.M",
-    "2:30 P.M - 3:00 P.M",
-    "3:00 P.M - 3:30 P.M",
-    "3:30 P.M - 4:00 P.M",
-    "4:00 P.M - 4:30 P.M",
-    "4:30 P.M - 5:00 P.M",
-    "5:00 P.M - 5:30 P.M",
-    "5:30 P.M - 6:00 P.M",
-    "6:00 P.M - 6:30 P.M",
-    "6:30 P.M - 7:00 P.M",
-    "7:00 P.M - 7:30 P.M",
-    "7:30 P.M - 8:00 P.M",
-    "8:00 P.M - 8:30 P.M",
-    "8:30 P.M - 9:00 P.M",
-    "9:00 P.M - 9:30 P.M",
-    "9:30 P.M - 10:00 P.M",
-    "10:00 P.M - 10:30 P.M",
-    "10:30 P.M - 11:00 P.M",
-    "11:00 P.M - 11:30 P.M",
-    "11:30 P.M - 12:00 P.M",
-  ];
   const { activity, setActivity } = useActivityContext();
   const inputRef = useRef([]);
 
@@ -92,60 +45,17 @@ export default function TimingDisplay({ selectedDate }) {
   }, [categoryReturned]);
 
   useEffect(() => {
-    setTimeout(() => {
-      let flag = true;
-      let count = 0;
-      activity?.map((item) => {
-        if (item.isSelected) count++;
-      });
-      console.log(count);
-      if (count < 2) {
-        console.log("running");
-        try {
-          if (!(activity?.length === 0)) {
-            (async () => {
-              const categories = await saveActivityDb(
-                activity,
-                selectedDate.toDateString(),
-                session.user.email,
-                categoryList,
-              );
-              console.log(categories);
-
-              const updateActivity = activity.map((item, index) => {
-                let flag = false;
-                if (item.category != categories[index]?.category) flag = true;
-
-                return { ...item, category: categories[index]?.category };
-              });
-              if (flag) setActivity(updateActivity);
-            })();
-          }
-        } catch (error) {
-          console.error(error.message);
-        }
-      }
-    }, 100);
+    updateDbActivity(
+      activity,
+      selectedDate,
+      session,
+      categoryList,
+      setActivity,
+    );
   }, [updateDb]);
 
   useEffect(() => {
-    const getActivity = async () => {
-      setLoading(true);
-      let storedActivity = await getActivityDb(
-        session?.user?.email,
-        selectedDate.toDateString(),
-        1,
-      );
-      if (!storedActivity) {
-        storedActivity = timeSegments.map((item, index) => {
-          return { isSelected: false, value: "", category: null };
-        });
-      }
-
-      setActivity(storedActivity);
-      setLoading(false);
-    };
-    getActivity();
+    getActivity(session, selectedDate, setLoading, setActivity);
   }, [selectedDate]);
 
   useEffect(() => {
