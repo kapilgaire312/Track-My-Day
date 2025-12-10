@@ -13,7 +13,7 @@ export const getActivity = async (
     selectedDate.toDateString(),
     1,
   );
-  if (!storedActivity) {
+  if (!storedActivity || storedActivity.length === 0) {
     storedActivity = timeSegments.map((item, index) => {
       return { isSelected: false, value: "", category: null };
     });

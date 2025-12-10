@@ -11,8 +11,9 @@ export default async function findCategory(activities, categoryList) {
     }
     return { value: item.value, category: item.category };
   };
-
-  const categorizedActivities = await Promise.all(activities.map(classify));
+  let categorizedActivities;
+  if (activities)
+    categorizedActivities = await Promise.all(activities?.map(classify));
   console.log(`in finding category`);
   console.log(categorizedActivities);
   return categorizedActivities;

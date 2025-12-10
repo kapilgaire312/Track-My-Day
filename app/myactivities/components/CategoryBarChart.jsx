@@ -1,19 +1,16 @@
 import {
   BarChart,
   Bar,
-  Rectangle,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   Cell,
 } from "recharts";
 import { getTicks } from "../utils/getTicksForXaxis";
 import Loading from "@/app/Components/Loading";
 export default function CategoryBarChart({ data, colourList }) {
   const ticks = getTicks(data);
-
   console.log(data);
 
   return !data ? (
