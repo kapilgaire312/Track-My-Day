@@ -8,7 +8,7 @@ import {
   Cell,
 } from "recharts";
 import { getTicks } from "../utils/getTicksForXaxis";
-import Loading from "@/app/Components/Loading";
+import Loading from "@/Components/Loading";
 export default function CategoryBarChart({ data, colourList }) {
   const ticks = getTicks(data);
   console.log(data);

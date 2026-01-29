@@ -1,13 +1,13 @@
 "use client";
 
 import Select from "react-select";
-import { useActivityContext } from "../Contexts/activityContext";
+import { useActivityContext } from "../../Contexts/activityContext";
 import { fetchFromDB, fetchMultiFromDb } from "./utils/fetchFromDB.js";
-import { useCategoryListContext } from "../Contexts/categoryContext";
+import { useCategoryListContext } from "../../Contexts/categoryContext";
 import CategoryBarChart from "./components/CategoryBarChart";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import { categoryListConvert } from "../utils/createOptionsFromCat";
+import { categoryListConvert } from "../../utils/createOptionsFromCat";
 import { handleOnChangeCategory } from "./utils/handleSelectOnChange";
 import { countCategory } from "./utils/countCategory";
 import { filterMultiActivity, spreadMultiActivity } from "./utils/handleMulti";
@@ -60,7 +60,7 @@ export default function MyActivities() {
     (async () => {
       const todayActivities = await fetchFromDB(session);
       setAllActivities(todayActivities);
-      setActivity(todayActivities); // to prevent the mutation of todays data when we return to home ('/')
+      setActivity(todayActivities);
     })();
   }, [session]);
 

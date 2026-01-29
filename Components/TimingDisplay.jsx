@@ -35,16 +35,6 @@ export default function TimingDisplay({ selectedDate }) {
   const { categoryList } = useCategoryListContext();
 
   useEffect(() => {
-    let flag = false;
-    const updateActivity = activity?.map((item, index) => {
-      if (item.category != categoryReturned[index]?.category) flag = true;
-
-      return { ...item, category: categoryReturned[index]?.category };
-    });
-    if (flag) setActivity(updateActivity);
-  }, [categoryReturned]);
-
-  useEffect(() => {
     updateDbActivity(
       activity,
       selectedDate,

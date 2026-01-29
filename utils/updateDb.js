@@ -26,7 +26,7 @@ export function updateDbActivity(
               categoryList,
             );
 
-            const updateActivity = activity.map((item, index) => {
+            const updateActivity = activity?.map((item, index) => {
               let flag = false;
               if (item.category != categories[index]?.category) flag = true;
 

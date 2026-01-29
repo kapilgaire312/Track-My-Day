@@ -13,8 +13,7 @@ export default async function findCategory(activities, categoryList) {
   };
   let categorizedActivities;
   if (activities)
-    categorizedActivities = await Promise.all(activities?.map(classify));
-  console.log(`in finding category`);
+    categorizedActivities = await Promise.all(activities?.map(classify)); //Promise.all() in JavaScript takes an iterable (such as an array) of promises and returns a single new promise.
   console.log(categorizedActivities);
   return categorizedActivities;
 }

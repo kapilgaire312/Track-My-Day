@@ -4,7 +4,7 @@ import LoginForm from "./loginForm";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import Loading from "../Components/Loading";
+import Loading from "../../Components/Loading";
 
 export default function Login() {
   const { data: session, status } = useSession();

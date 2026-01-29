@@ -14,10 +14,9 @@ export default async function saveActivityDb(
   });
 
   if (!res.ok) {
-    console.log(res)
+    console.log(res);
     throw new Error("Failed saving added activities.");
   }
   const category = await res.json();
   return category.msg;
 }
-

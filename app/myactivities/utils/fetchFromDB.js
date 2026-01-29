@@ -1,5 +1,5 @@
 "use server";
-import getActivityDb from "@/app/utils/getActivityDb";
+import getActivityDb from "@/utils/getActivityDb";
 // fetch activity of today
 export async function fetchFromDB(session) {
   let storedActivity;

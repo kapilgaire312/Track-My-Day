@@ -1,8 +1,8 @@
 import "./globals.css";
-import Header from "./Components/Header";
+import Header from "../Components/Header";
 import { SessionProvider } from "next-auth/react";
-import { ActivityProvider } from "./Contexts/activityContext";
-import { CategoryListProvider } from "./Contexts/categoryContext";
+import { ActivityProvider } from "../Contexts/activityContext";
+import { CategoryListProvider } from "../Contexts/categoryContext";
 
 export default function RootLayout({ children }) {
   return (

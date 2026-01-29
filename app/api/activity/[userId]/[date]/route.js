@@ -72,10 +72,16 @@ function maintainOrderOfActivityDays(activities, daysList) {
     let foundActivity = [];
     foundActivity = activities.find((item) => day === item.date);
     if (!foundActivity) {
+      let newActivity = [];
+
       for (let i = 0; i < 48; i++) {
-        foundActivity.push({ isSelected: false, value: "", category: null });
+        newActivity.push({
+          isSelected: false,
+          value: "",
+          category: null,
+        });
       }
-      return foundActivity;
+      return newActivity;
     }
     return foundActivity.activity;
   });

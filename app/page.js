@@ -1,13 +1,13 @@
 'use client'
 
-import TimingDisplay from "./Components/TimingDisplay";
+import TimingDisplay from "../Components/TimingDisplay";
 
-import DateDisplay from "./Components/DateDisplay";
+import DateDisplay from "../Components/DateDisplay";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useCheckSession } from "./hooks/useCheckSession";
-import Loading from "./Components/Loading";
+import { useCheckSession } from "../hooks/useCheckSession";
+import Loading from "../Components/Loading";
 
 export default function Home() {
   // const { data: session, status } = useSession();  // here the useSession returns a data object and status. the data contains the user deatils and expiry time which we then redefined to session.
