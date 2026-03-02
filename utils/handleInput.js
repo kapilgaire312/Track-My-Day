@@ -1,9 +1,9 @@
 export function updateCheckbox(selectedIndex, activity, setActivity, inputRef) {
-  const updatedActivity = activity.map((item, index) => {
+  const updatedActivity = activity?.map((item, index) => {
     if (index === selectedIndex) {
       if (item.isSelected) {
         inputRef.current[selectedIndex].blur();
-        const nextSelected = activity.findIndex((item, thisIndex) => {
+        const nextSelected = activity?.findIndex((item, thisIndex) => {
           if (index != thisIndex) {
             return item.isSelected;
           }
@@ -22,7 +22,7 @@ export function updateCheckbox(selectedIndex, activity, setActivity, inputRef) {
 }
 
 export function updateValue(value, activity, setActivity, index) {
-  const updatedActivity = activity.map((item, itemIndex) => {
+  const updatedActivity = activity?.map((item, itemIndex) => {
     if (itemIndex === index) {
       return {
         isSelected: true,
@@ -48,7 +48,7 @@ export function selectTimeSegment(
   setActivity,
   inputRef,
 ) {
-  let updatedActivity = activity.map((item, index) => {
+  let updatedActivity = activity?.map((item, index) => {
     return {
       isSelected: index === selectedIndex ? true : false,
       value: item.value,
@@ -79,7 +79,7 @@ export function saveActivity(key, activity, setActivity, inputRef) {
 }
 
 export function outsideClick(activity, setActivity) {
-  const updatedActivity = activity.map((item) => {
+  const updatedActivity = activity?.map((item) => {
     return {
       isSelected: false,
       value: item.value,
@@ -90,7 +90,7 @@ export function outsideClick(activity, setActivity) {
 }
 
 export function selectionFocus(activity, setActivity, clickedIndex) {
-  const selectedActivities = activity.map((item, index) => {
+  const selectedActivities = activity?.map((item, index) => {
     if (item.isSelected) return index;
   });
   let flag = true;
@@ -111,7 +111,7 @@ export function selectionFocus(activity, setActivity, clickedIndex) {
     return;
   }
 
-  const updatedActivity = activity.map((item, index) => {
+  const updatedActivity = activity?.map((item, index) => {
     const isSelected = selectedActivities.filter((item) => {
       if (item === index) return true;
     });

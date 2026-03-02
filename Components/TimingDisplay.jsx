@@ -9,9 +9,7 @@ import {
   outsideClick,
   selectionFocus,
 } from "../utils/handleInput";
-import saveActivityDb from "../utils/saveActivityDb";
 import { useSession } from "next-auth/react";
-import getActivityDb from "../utils/getActivityDb";
 import Loading from "./Loading";
 import Select from "react-select";
 import { useActivityContext } from "../Contexts/activityContext.js";

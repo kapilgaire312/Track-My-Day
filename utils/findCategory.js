@@ -1,3 +1,4 @@
+"use server";
 import { classifyActivities } from "@/lib/classifier/activityClassifier";
 
 export default async function findCategory(activities, categoryList) {

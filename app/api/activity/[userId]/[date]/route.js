@@ -1,13 +1,15 @@
 import Activity from "@/lib/models/activity-model";
 import dbConnect from "@/lib/services/mongodb";
 import { NextResponse } from "next/server";
+import { getPreviousDaysActivities } from "./getPreviousDaysActivities.js";
 
 export async function GET(req, { params }) {
   try {
     const { userId, date } = await params;
     console.log(userId);
     console.log(date);
-    const days = req.nextUrl.searchParams.get("days");
+    const daysString = req.nextUrl.searchParams.get("days");
+    const days = Number(daysString);
     console.log(days);
 
     await dbConnect();
@@ -26,64 +28,24 @@ export async function GET(req, { params }) {
       if (!existingActivity) {
         return NextResponse.json({ msg: null }, { status: 404 });
       }
-      console.log(JSON.stringify(existingActivity, null, 2));
       return NextResponse.json(
         { msg: existingActivity.activity },
         { status: 200 },
       );
     } else {
-      const today = new Date(date);
-      const previousDays = getPreviousDays(today, days);
-      console.log(previousDays);
-      const existingActivity = await activitiesDb.activities.filter((item) =>
-        previousDays.includes(item.date),
+      let requiredActivity = await getPreviousDaysActivities(
+        activitiesDb,
+        date,
+        days,
       );
-
-      if (!existingActivity) {
-        return NextResponse.json({ msg: null }, { status: 404 });
+      if (!requiredActivity) {
+        return NextResponse.json({ msg: null }, { status: 500 });
       }
-      console.log(JSON.stringify(existingActivity[0], null, 2));
-      let requiredActivity = maintainOrderOfActivityDays(
-        existingActivity,
-        previousDays,
-      );
+
       return NextResponse.json({ msg: requiredActivity }, { status: 200 });
     }
   } catch (error) {
     console.log(error);
     throw new Error("Cannot fetch the activities.");
   }
-}
-
-function getPreviousDays(today, days) {
-  const todayDate = today.getDate();
-  let previousDays = [];
-
-  for (let i = 0; i < days; i++) {
-    const previousDate = new Date(today);
-    previousDate.setDate(todayDate - i);
-    previousDays.push(previousDate.toDateString());
-  }
-  return previousDays;
-}
-
-function maintainOrderOfActivityDays(activities, daysList) {
-  const sortedActivities = daysList.map((day, index) => {
-    let foundActivity = [];
-    foundActivity = activities.find((item) => day === item.date);
-    if (!foundActivity) {
-      let newActivity = [];
-
-      for (let i = 0; i < 48; i++) {
-        newActivity.push({
-          isSelected: false,
-          value: "",
-          category: null,
-        });
-      }
-      return newActivity;
-    }
-    return foundActivity.activity;
-  });
-  return sortedActivities;
 }

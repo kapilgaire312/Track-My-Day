@@ -1,6 +1,10 @@
 "use server";
 
+import { auth } from "@/auth";
+
 export default async function getActivityDb(userId, date, days = 1) {
+  const session = await auth();
+  console.log(session);
   try {
     console.log("db request came");
     const res = await fetch(
@@ -10,7 +14,7 @@ export default async function getActivityDb(userId, date, days = 1) {
     const activity = await res.json();
     console.log(activity?.msg);
     if (days === 1) {
-      const activities = activity?.msg[0]?.map((item) => {
+      const activities = activity?.msg?.map((item) => {
         return {
           isSelected: false,
           value: item.value,
