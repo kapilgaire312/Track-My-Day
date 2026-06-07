@@ -13,7 +13,7 @@ export async function POST(req) {
       data.activities,
       data.categoryList,
     );
-
+ 
     await dbConnect();
     let userActivities = await Activity.findOne({ userId: data.userId });
     if (!userActivities) {

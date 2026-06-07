@@ -15,7 +15,7 @@ export async function getPreviousDaysActivities(activitiesDb, date, days) {
     existingActivity,
     previousDays,
   );
-  return requiredActivity;
+  return [requiredActivity, previousDays];
 }
 function getPreviousDays(today, days) {
   const todayDate = today.getDate();

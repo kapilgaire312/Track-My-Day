@@ -81,6 +81,7 @@ export default function TimingDisplay({ selectedDate }) {
             <button></button>
           </div>
           <div className="font-semibold text-xl sm:text-2xl text-center py-1 bg-gray-300 rounded">
+            {" "}
             Time
           </div>
           <div className="font-semibold text-xl sm:text-2xl mr-1 text-center py-1 bg-gray-300 rounded">

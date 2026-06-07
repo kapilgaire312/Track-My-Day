@@ -33,7 +33,7 @@ export async function GET(req, { params }) {
         { status: 200 },
       );
     } else {
-      let requiredActivity = await getPreviousDaysActivities(
+      let [requiredActivity] = await getPreviousDaysActivities(
         activitiesDb,
         date,
         days,

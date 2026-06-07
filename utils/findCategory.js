@@ -1,10 +1,14 @@
 "use server";
 import { classifyActivities } from "@/lib/classifier/activityClassifier";
 
-export default async function findCategory(activities, categoryList) {
+export default async function findCategory(
+  activities,
+  categoryList,
+  recalculate = false,
+) {
   const classify = async (item, index) => {
     if (item?.value?.trim() != "") {
-      if (!item.category) {
+      if (!item.category || recalculate) {
         const category = await classifyActivities(item.value, categoryList);
         console.log(category);
         return { value: item.value, category: category?.labels[0] };

@@ -2,6 +2,7 @@
 import { useSession } from "next-auth/react";
 import { useContext, createContext, useState, useEffect } from "react";
 import getCategoryList from "./util";
+import handleCategoryChange from "@/utils/handleCategoryChange";
 
 //create the context for category
 

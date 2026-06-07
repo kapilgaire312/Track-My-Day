@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Popup from "./Popup";
+import handleCategoryChange from "@/utils/handleCategoryChange";
 
 export default function MyCategories({ categoryList, setCategoryList }) {
   const [popup, setPopup] = useState({
@@ -46,6 +47,12 @@ export default function MyCategories({ categoryList, setCategoryList }) {
       });
     }
   }
+  //handle the category change
+  useEffect(() => {
+    if (categoryList.length) {
+     // handleCategoryChange(categoryList);
+    }
+  }, [categoryList]);
 
   return (
     <div className="relative">
@@ -72,6 +79,7 @@ export default function MyCategories({ categoryList, setCategoryList }) {
                   className="w-[80%] bg-gray-200 rounded"
                   onClick={() => {
                     handleEdit(index);
+                    
                   }}
                 >
                   Edit
