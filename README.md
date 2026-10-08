@@ -184,6 +184,8 @@ npm run start    # Start the production server
 4. Use a production MongoDB connection string in `DB_URI_`.
 5. Configure a verified Resend sender domain/address.
 6. Confirm the deployment can download the classifier model on its first use.
+   The app uses `/tmp/track-my-day-transformers` for the temporary model cache
+   because Vercel's deployed filesystem is read-only.
 7. Run `npm run build` before deploying.
 
 Never commit `.env.local` or expose database, JWT, Auth.js, or Resend secrets.
