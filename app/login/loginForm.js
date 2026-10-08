@@ -2,13 +2,21 @@
 
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 
 export default function LoginForm() {
   const [errorMsg, setErrorMsg] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
   const router = useRouter()
+
+  function useTestAccount() {
+    emailRef.current.value = "test@gmail.com";
+    passwordRef.current.value = "12345678";
+    setErrorMsg(null);
+  }
 
   async function handleSubmit(email, password) {
     setIsSubmitting(true);
@@ -58,14 +66,14 @@ export default function LoginForm() {
           <div className="flex flex-col gap-1">
 
             <label htmlFor='email'>Email:</label>
-            <input name="email" className="border-2 border-gray-400 rounded" id="email"></input>
+            <input ref={emailRef} name="email" className="border-2 border-gray-400 rounded" id="email"></input>
 
           </div>
 
 
           <div className="flex flex-col gap-1">
             <label htmlFor="pass">Password:</label>
-            <input name="password" className="border-2 border-gray-400 rounded" id="pass" type="password"></input>
+            <input ref={passwordRef} name="password" className="border-2 border-gray-400 rounded" id="pass" type="password"></input>
 
           </div>
 
@@ -83,6 +91,17 @@ export default function LoginForm() {
         </div>
 
       </form>
+      <button
+        type="button"
+        disabled={isSubmitting}
+        onClick={useTestAccount}
+        className="ui-button w-full rounded border border-gray-400 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        Use test account
+      </button>
+      <p className="mt-2 text-center text-xs text-gray-500">
+        Fills the demo account credentials for you.
+      </p>
       {errorMsg && <p className="text-red-500 text-xs max-w-48 text-center mt-2 mb-2">{errorMsg}</p>}
     </div>
   )

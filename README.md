@@ -154,6 +154,19 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+## Demo account
+
+Visitors can try the app using the test account from the login page:
+
+```text
+Email:    test@gmail.com
+Password: 12345678
+```
+
+The login page includes a **Use test account** button that fills these
+credentials without submitting the form automatically. Keep this account
+limited to sample data and never use it for real personal information.
+
 ## Available scripts
 
 ```bash
