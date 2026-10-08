@@ -1,24 +1,30 @@
 "use server";
 import { classifyActivities } from "@/lib/classifier/activityClassifier";
+import { normalizeCategoryList } from "./categoryList";
 
 export default async function findCategory(
   activities,
   categoryList,
   recalculate = false,
 ) {
+  const normalizedCategories = normalizeCategoryList(categoryList);
   const classify = async (item, index) => {
-    if (item?.value?.trim() != "") {
-      if (!item.category || recalculate) {
-        const category = await classifyActivities(item.value, categoryList);
-        console.log(category);
-        return { value: item.value, category: category?.labels[0] };
-      } else return { value: item.value, category: item.category };
+    const value = item?.value?.trim();
+    if (value) {
+      const categoryIsValid = normalizedCategories.includes(item.category);
+      if (!item.category || (recalculate && !categoryIsValid)) {
+        const result = await classifyActivities(value, normalizedCategories);
+        const predictedCategory = result?.labels?.[0];
+        if (!normalizedCategories.includes(predictedCategory)) {
+          throw new Error("Classifier returned an invalid category.");
+        }
+        return { ...item, value: item.value, category: predictedCategory };
+      }
     }
-    return { value: item.value, category: item.category };
+    return { ...item, value: item.value, category: item.category };
   };
   let categorizedActivities;
   if (activities)
     categorizedActivities = await Promise.all(activities?.map(classify)); //Promise.all() in JavaScript takes an iterable (such as an array) of promises and returns a single new promise.
-  console.log(categorizedActivities);
   return categorizedActivities;
 }

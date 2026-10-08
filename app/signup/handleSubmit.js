@@ -1,5 +1,4 @@
-'use client'
-import { redirect } from "next/navigation"
+"use client";
 
 
 export default async function handleSubmit(email, password, cpassword) {
@@ -9,21 +8,14 @@ export default async function handleSubmit(email, password, cpassword) {
     password,
     cpassword,
   }
-  console.log(formdata)
   const res = await fetch('/api/user/signup', {
     method: 'POST',
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(formdata)
   })
-  console.log(res.ok)
+  const result = await res.json();
   if (!res.ok) {
-    const error = await res.json()
-    console.log('entered')
-    console.log(error)
-    return error.msg
+    return { error: result.msg || "Unable to create your account." };
   }
-  else {
-    redirect('/')
-
-  }
+  return { success: true, message: result.msg };
 }

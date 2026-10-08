@@ -39,7 +39,7 @@ export default function MyActivities() {
 
   const [selectedDate, setSelectedDate] = useState(dateOptions[0]);
 
-  const [allActivities, setAllActivities] = useState(activity);
+  const [allActivities, setAllActivities] = useState([]);
 
   const [activityOf7Days, setActivityOf7Days] = useState([]);
   const [activityOf3Days, setActivityOf3Days] = useState([]);
@@ -56,23 +56,25 @@ export default function MyActivities() {
 
   //fetch todays data
   useEffect(() => {
-    if (!session?.user) return;
+    if (status !== "authenticated" || !session?.user?.email) return;
     (async () => {
       const todayActivities = await fetchFromDB(session);
-      setAllActivities(todayActivities);
-      setActivity(todayActivities);
+      const activities = todayActivities || [];
+      setAllActivities(activities);
+      setActivity(activities);
     })();
-  }, [session]);
+  }, [session, session?.user?.email, status, setActivity]);
 
   // fetch data for 7 days when user visits the page
   useEffect(() => {
+    if (status !== "authenticated" || !session?.user?.email) return;
     if (!activityOf7Days?.length) {
       (async () => {
         const fetchedActivities = await fetchMultiFromDb(session, 7);
-        setActivityOf7Days(fetchedActivities);
+        setActivityOf7Days(fetchedActivities || []);
       })();
     }
-  }, [session]);
+  }, [session, session?.user?.email, status, activityOf7Days?.length]);
 
   // after fetching data of seven days, add the values for 3 days
   useEffect(() => {
@@ -88,7 +90,7 @@ export default function MyActivities() {
     } else if (selectedDate.value === "Today") {
       setAllActivities(activity);
     }
-  }, [selectedDate]);
+  }, [selectedDate, activity, activityOf3Days, activityOf7Days]);
 
   return (
     <div className="overflow-hidden">

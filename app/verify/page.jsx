@@ -1,9 +1,9 @@
 'use client'
 
 import { useSearchParams, useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 
-export default function Verify() {
+function VerifyContent() {
 
   const [message, setMessage] = useState("Please wait while we verify the user...")
   const searchParams = useSearchParams()
@@ -38,7 +38,7 @@ export default function Verify() {
         route.replace("/login")
       }, 1500);
     }
-    if (!res.OK) {
+    if (!res.ok) {
       setMessage(response.msg)
 
     }
@@ -56,4 +56,12 @@ export default function Verify() {
       </div>
     </div>
   )
+}
+
+export default function Verify() {
+  return (
+    <Suspense fallback={<div className="flex justify-center items-center mt-6">Please wait while we verify the user...</div>}>
+      <VerifyContent />
+    </Suspense>
+  );
 }

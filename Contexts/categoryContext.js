@@ -1,8 +1,6 @@
 "use client";
 import { useSession } from "next-auth/react";
 import { useContext, createContext, useState, useEffect } from "react";
-import getCategoryList from "./util";
-import handleCategoryChange from "@/utils/handleCategoryChange";
 
 //create the context for category
 
@@ -20,16 +18,34 @@ export function CategoryListProvider({ children }) {
   const [email, setEmail] = useState(null);
   //fetch lists from the db
   useEffect(() => {
-    if (userId) {
-      (async () => {
-        const values = await getCategoryList(userId);
-        if (values) {
+    if (!userId || status !== "authenticated") return;
+
+    let cancelled = false;
+    (async () => {
+      try {
+        const response = await fetch(`/api/category/${userId}`, {
+          cache: "no-store",
+        });
+        if (!response.ok) throw new Error("Unable to load categories.");
+
+        const message = await response.json();
+        const values =
+          typeof message.msg === "string"
+            ? JSON.parse(message.msg)
+            : message.msg;
+        if (!cancelled && values) {
           setEmail(values.email);
           setCategoryList(values.categoryList);
         }
-      })();
-    }
-  }, [userId]);
+      } catch (error) {
+        if (!cancelled) console.error("Failed to load categories:", error);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [status, userId]);
 
   //define object for values to send
   const values = { categoryList, setCategoryList, email }; //here we are also sending the email to show it to profile section

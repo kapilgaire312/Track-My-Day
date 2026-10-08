@@ -9,7 +9,7 @@ export default function MyProfile({ handleSignout, email }) {
           <div>{email}</div>
         </div>
         <button
-          className="bg-gray-300 rounded p-1 w-[30%] sm:w-[10%] text-[1.2rem]"
+          className="ui-button bg-gray-300 rounded p-1 w-[30%] sm:w-[10%] text-[1.2rem]"
           onClick={handleSignout}
         >
           Sign Out

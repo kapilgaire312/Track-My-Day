@@ -18,7 +18,7 @@ export default function DateDisplay({ selectedDate, setSelectedDate }) {
     <div className="flex justify-end select-none">
       <div className="flex gap-1 sm:gap-2 justify-center  pr-2 sm:pr-8 my-4 text-[15px] sm:text-xl font-semibold h-full ">
         <button
-          className="h-full bg-gray-200 rounded"
+          className="ui-button h-full bg-gray-200 rounded px-1"
           onClick={() => {
             goYesterday(selectedDate, setSelectedDate);
           }}
@@ -44,7 +44,7 @@ export default function DateDisplay({ selectedDate, setSelectedDate }) {
         </div>
 
         <button
-          className={`bg-gray-200 disabled:bg-gray-50 rounded`}
+          className={`ui-button bg-gray-200 disabled:bg-gray-50 rounded px-1`}
           disabled={isTodaySelected()}
           onClick={() => {
             goTomorrow(selectedDate, setSelectedDate);
@@ -56,4 +56,3 @@ export default function DateDisplay({ selectedDate, setSelectedDate }) {
     </div>
   );
 }
-

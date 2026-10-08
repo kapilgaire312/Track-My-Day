@@ -3,3 +3,43 @@
 .body {
   overflow-x: none;
 }
+
+.ui-button {
+  transition:
+    transform 150ms ease,
+    background-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.ui-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgb(0 0 0 / 12%);
+}
+
+.ui-button:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+  box-shadow: none;
+}
+
+.ui-button:focus-visible,
+textarea:focus-visible,
+input:focus-visible {
+  outline: 2px solid rgb(107 114 128 / 70%);
+  outline-offset: 2px;
+}
+
+.time-section-content {
+  animation: section-open 180ms ease-out;
+  transform-origin: top;
+}
+
+@keyframes section-open {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

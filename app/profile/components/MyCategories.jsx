@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useSession } from "next-auth/react";
 import Popup from "./Popup";
-import handleCategoryChange from "@/utils/handleCategoryChange";
 
 export default function MyCategories({ categoryList, setCategoryList }) {
+  const { data: session } = useSession();
   const [popup, setPopup] = useState({
     isSelected: false,
     index: null,
@@ -11,6 +12,24 @@ export default function MyCategories({ categoryList, setCategoryList }) {
     butt1: null,
     butt2: null,
   });
+
+  async function saveCategoryList(nextCategoryList) {
+    const userId = session?.user?.email;
+    if (!userId) {
+      throw new Error("Your session has expired. Please sign in again.");
+    }
+
+    const response = await fetch(`/api/category/${userId}`, {
+      method: "PUT",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ categoryList: nextCategoryList }),
+    });
+    const result = await response.json();
+    if (!response.ok) {
+      throw new Error(result.msg || "Failed to save categories.");
+    }
+    setCategoryList(result.categoryList);
+  }
   function handleEdit(index) {
     if (!popup.isSelected) {
       setPopup({
@@ -47,13 +66,6 @@ export default function MyCategories({ categoryList, setCategoryList }) {
       });
     }
   }
-  //handle the category change
-  useEffect(() => {
-    if (categoryList.length) {
-     // handleCategoryChange(categoryList);
-    }
-  }, [categoryList]);
-
   return (
     <div className="relative">
       <div className="font-semibold text-xl">My Categories</div>
@@ -61,7 +73,7 @@ export default function MyCategories({ categoryList, setCategoryList }) {
         <Popup
           categoryList={categoryList}
           popup={popup}
-          setCategoryList={setCategoryList}
+          onCategoryListChange={saveCategoryList}
           setPopup={setPopup}
         />
       )}{" "}
@@ -76,7 +88,7 @@ export default function MyCategories({ categoryList, setCategoryList }) {
               <div className="text-center">
                 {" "}
                 <button
-                  className="w-[80%] bg-gray-200 rounded"
+                  className="ui-button w-[80%] bg-gray-200 rounded"
                   onClick={() => {
                     handleEdit(index);
                     
@@ -88,7 +100,7 @@ export default function MyCategories({ categoryList, setCategoryList }) {
               <div className="text-center">
                 {" "}
                 <button
-                  className="w-[80%] bg-gray-300 rounded px-1"
+                  className="ui-button w-[80%] bg-gray-300 rounded px-1"
                   onClick={() => {
                     handleDelete(index);
                   }}
@@ -102,7 +114,7 @@ export default function MyCategories({ categoryList, setCategoryList }) {
       </div>
       <div className="flex justify-center my-6">
         <div
-          className="bg-gray-200 text-[1.2rem] px-2 rounded "
+          className="ui-button bg-gray-200 text-[1.2rem] px-2 rounded cursor-pointer hover:bg-gray-300"
           onClick={handleAdd}
         >
           Add Category

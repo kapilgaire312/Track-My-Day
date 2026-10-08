@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import SignUpForm from "./SIgnUpForm";
-import dbConnect from "../../lib/services/mongodb";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
@@ -18,7 +17,6 @@ export default function Signup() {
       setShowSignupForm(true);
     }
   }, [status]);
-  dbConnect();
   return showSignupForm ? (
     <>
       <div className="flex justify-center mt-8">
@@ -42,4 +40,3 @@ export default function Signup() {
     <Loading />
   );
 }
-

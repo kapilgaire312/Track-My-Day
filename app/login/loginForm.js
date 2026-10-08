@@ -7,31 +7,41 @@ import { useState } from "react";
 
 export default function LoginForm() {
   const [errorMsg, setErrorMsg] = useState(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const router = useRouter()
 
   async function handleSubmit(email, password) {
+    setIsSubmitting(true);
+    setErrorMsg(null);
+    try {
+      const verificationCheck = await fetch("/api/user/login", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      const verificationResult = await verificationCheck.json();
 
-    const res = await signIn('credentials',
-      {
+      if (!verificationCheck.ok) {
+        setErrorMsg(verificationResult.msg || "Unable to log in.");
+        return;
+      }
+
+      const res = await signIn("credentials", {
         redirect: false,
         email,
-        password
+        password,
+      });
+
+      if (res.error) {
+        setErrorMsg("Unable to log in. Please try again.");
+        return;
       }
-    )
-
-    console.log(res)
-    // const message = await res.json()
-
-    if (res.error) {
-      setErrorMsg('Invalid Credentials.')
+      router.replace("/");
+    } catch (error) {
+      setErrorMsg("Unable to log in. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
-    else {
-      router.replace('/')
-      setErrorMsg(null)
-    }
-
-
-
   }
   return (
     <div>
@@ -63,7 +73,13 @@ export default function LoginForm() {
         </div>
 
         <div className={`text-center mt-6 ${!errorMsg && 'mb-5'}`}>
-          <button className="border bg-gray-600 text-white font-bold px-5 py-1.5 rounded">Login</button>
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="ui-button border bg-gray-600 text-white font-bold px-5 py-1.5 rounded hover:bg-gray-700 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {isSubmitting ? "Logging in..." : "Login"}
+          </button>
         </div>
 
       </form>

@@ -3,18 +3,28 @@ import User from "@/lib/models/user-model";
 import dbConnect from "@/lib/services/mongodb";
 import { NextResponse } from "next/server";
 import findCategory from "@/utils/findCategory";
+import { auth } from "@/auth";
 
 export async function POST(req) {
-  const data = await req.json();
-  console.log(data);
-
   try {
+    const session = await auth();
+    const data = await req.json();
+    const userId = session?.user?.email;
+    if (!userId || userId !== data.userId) {
+      return NextResponse.json({ msg: "Unauthorized." }, { status: 401 });
+    }
+
+    await dbConnect();
+    const user = await User.findById(userId);
+    if (!user) {
+      return NextResponse.json({ msg: "User not found." }, { status: 404 });
+    }
+
     const categorizedActivities = await findCategory(
       data.activities,
-      data.categoryList,
+      user.categoryList,
     );
  
-    await dbConnect();
     let userActivities = await Activity.findOne({ userId: data.userId });
     if (!userActivities) {
       const activities = await Activity.create({
@@ -22,7 +32,6 @@ export async function POST(req) {
         userId: data.userId,
       });
 
-      const user = await User.findById(data.userId);
       user.activities = activities._id;
       await user.save();
 

@@ -3,7 +3,7 @@ import { useState } from "react";
 export default function Popup({
   categoryList,
   popup,
-  setCategoryList,
+  onCategoryListChange,
   setPopup,
 }) {
   const [value, setValue] = useState(
@@ -27,7 +27,7 @@ export default function Popup({
     Add: handleAdd,
   };
 
-  function handleOkay() {
+  async function handleOkay() {
     const inputEror = checkCategoryInputs();
     if (inputEror) return;
     const updatedCategoryList = categoryList.map((item, index) => {
@@ -36,8 +36,7 @@ export default function Popup({
       }
       return item;
     });
-    setCategoryList(updatedCategoryList);
-    handleNo();
+    await saveCategoryList(updatedCategoryList);
   }
   function handleCancel() {
     setValue(null);
@@ -45,7 +44,7 @@ export default function Popup({
     handleNo();
   }
 
-  function handleYes() {
+  async function handleYes() {
     if (categoryList.length === MIN_CATEGORY) {
       setError("There should be atleast one category!");
       return;
@@ -57,20 +56,17 @@ export default function Popup({
       }
       return true;
     });
-    setCategoryList(updatedCategoryList);
-
-    handleNo();
+    await saveCategoryList(updatedCategoryList);
   }
 
-  function handleAdd() {
+  async function handleAdd() {
     const inputEror = checkCategoryInputs();
     if (inputEror) return;
     if (categoryList.length === MAX_CATEGORY) {
       setError(`max ${MAX_CATEGORY} categories allowed!`);
       return;
     }
-    setCategoryList([...categoryList, value]);
-    handleNo();
+    await saveCategoryList([...categoryList, value]);
   }
 
   function handleNo() {
@@ -82,6 +78,15 @@ export default function Popup({
       butt1: null,
       butt2: null,
     });
+  }
+
+  async function saveCategoryList(updatedCategoryList) {
+    try {
+      await onCategoryListChange(updatedCategoryList);
+      handleNo();
+    } catch (error) {
+      setError(error.message);
+    }
   }
 
   function checkCategoryInputs() {
@@ -126,13 +131,13 @@ export default function Popup({
       <div className="flex justify-end gap-10 mt-3">
         {" "}
         <button
-          className="border-1 px-1 rounded bg-gray-300"
+          className="ui-button border-1 px-1 rounded bg-gray-300"
           onClick={functionHandlers[button1]}
         >
           {button1}
         </button>
         <button
-          className="border-1 px-1 rounded bg-gray-100"
+          className="ui-button border-1 px-1 rounded bg-gray-100"
           onClick={functionHandlers[button2]}
         >
           {button2}

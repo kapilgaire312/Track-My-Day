@@ -1,10 +1,10 @@
 'use client'
 import Link from "next/link";
 import Image from "next/image";
-import { useCheckSession } from "../hooks/useCheckSession";
+import { useSession } from "next-auth/react";
 export default function Header() {
 
-  const status = useCheckSession()
+  const { status } = useSession();
 
   function isAuthenticated() {
     if (status === 'authenticated')
@@ -57,10 +57,10 @@ export default function Header() {
 
         {isAuthenticated() && <div className="flex text-xs sm:text-xl gap-2 sm:gap-8 md:gap-10 items-end ">
           <div className="bg-gray-100 px-1 py-0.5 rounded">
-            <Link href={'/myactivities'}> My Activities</Link>
+            <Link className="ui-button inline-block bg-gray-100 px-1 py-0.5 rounded hover:bg-white" href={'/myactivities'}> My Activities</Link>
           </div>
           <Link href={'/profile'}>
-            <div className=" px-1 py-0.5 rounded bg-gray-100">
+            <div className="ui-button px-1 py-0.5 rounded bg-gray-100 hover:bg-white">
               👤
             </div>
           </Link>

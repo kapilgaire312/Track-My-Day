@@ -1,15 +1,21 @@
 "use server";
 
+import { headers } from "next/headers";
+
 export default async function saveActivityDb(
   activities,
   date,
   userId,
   categoryList,
 ) {
-  console.log("yoyo");
+  const requestHeaders = await headers();
+  const cookie = requestHeaders.get("cookie");
   const res = await fetch(`${process.env.APP_URL}/api/activity`, {
     method: "POST",
-    headers: { "content-type": "application/json" },
+    headers: {
+      "content-type": "application/json",
+      ...(cookie ? { cookie } : {}),
+    },
     body: JSON.stringify({ activities, date, userId, categoryList }),
   });
 
